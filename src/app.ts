@@ -7,8 +7,6 @@ import dotenv from "dotenv";
 import cors from "cors";
 import timeout from "connect-timeout";
 import chalk from "chalk";
-import cron from "node-cron";
-import { getCurrency as fetchCurrency } from "./lib/getCurrencyRate";
 // import { connectRedis } from "./redisDB/redisConnection";
 
 import { TopLevelConfig } from "./config/types/config";
@@ -71,9 +69,6 @@ app.use((req, res, next) => {
   next();
 });
 
-cron.schedule("0 */5 * * *", () => {
-  void fetchCurrency();
-});
 // API Routes
 router(app);
 
