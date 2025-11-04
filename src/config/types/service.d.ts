@@ -1,6 +1,11 @@
 import { Document } from "mongodb";
+import mongoose from "mongoose";
 
 export interface IService extends Document {
-    title: string
-    number: number
+    name: string
+    serviceCategory: mongoose.Types.ObjectId,
+    expectedResponseTime: number
+    description: string
+    checkerRequiredAmount: number
+    isActive: boolean
 }

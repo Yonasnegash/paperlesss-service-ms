@@ -1,21 +1,18 @@
 import mongoose, { Schema } from "mongoose";
 import moment from "moment-timezone";
-import type { IService } from "../config/types/service";
+import type { ICategory } from "../config/types/service_category";
 
-const ServiceSchema = new Schema<IService>(
+const ServiceCategorySchema = new Schema<ICategory>(
   {
     name: { type: String, required: true, unique: true },
-    serviceCategory: { type: Schema.Types.ObjectId, ref: 'ServiceCategory', required: true },
-    expectedResponseTime: { type: Number, required: true },
-    checkerRequiredAmount: { type: Number },
-    description: { type: String },
+    number: { type: Number, required: true, unique: true },
     isActive: { type: Boolean, default: true }
   },
   { timestamps: true }
 );
 
 
-ServiceSchema.pre<IService>(
+ServiceCategorySchema.pre<ICategory>(
   "save",
   function (next) {
     const now = moment().tz("Africa/Addis_Ababa").format();
@@ -24,7 +21,7 @@ ServiceSchema.pre<IService>(
   }
 );
 
-ServiceSchema.pre<IService>(
+ServiceCategorySchema.pre<ICategory>(
   "findOneAndUpdate",
   function (next) {
     this.set({ updatedAt: moment().tz("Africa/Addis_Ababa").format() });
@@ -32,7 +29,7 @@ ServiceSchema.pre<IService>(
   }
 );
 
-export const Service = mongoose.model<IService>(
-  "Service",
-  ServiceSchema
+export const ServiceCategory = mongoose.model<ICategory>(
+  "ServiceCategory",
+  ServiceCategorySchema
 );
