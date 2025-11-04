@@ -24,7 +24,14 @@ const updateConfiguration = async (req: Request, res: Response, next: NextFuncti
     }
 }
 
-const changeConfigurationStatus = async (req: Request, res: Response, next: NextFunction) => {}
+const changeConfigurationStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+       await configurationDal.changeConfigurationStatus(req.params.id)
+       return res.status(200).json({ message: 'Success', status: 200 })
+    } catch (error) {
+        next(error)
+    }
+}
 
 export const configurationController = {
     getConfigurations,

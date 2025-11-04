@@ -1,5 +1,7 @@
+import mongoose from "mongoose"
 import { IConfiguration } from "../config/types/configuration"
 import { Configuration } from "../models/configuration.model"
+import { ApiError } from "../utils/ApiError"
 
 const fetchConfigurations = async () => {
     return await Configuration.find()
@@ -36,7 +38,15 @@ const updateConfiguration = async (configurations: IConfiguration) => {
         return updateResults
 }
 
-const changeConfigurationStatus = async () => {}
+const changeConfigurationStatus = async (id: mongoose.Types.ObjectId | string) => {
+    const config = await Configuration.findById(id)
+    if (!config) {
+        throw new ApiError(400, 'No configuration found')
+    }
+
+    const status = config.isActive === true ? false : true
+    return await Configuration.findOneAndUpdate({ _id: id }, { isActive: status }, { new: true })
+}
 
 export const configurationDal = {
     fetchConfigurations,
