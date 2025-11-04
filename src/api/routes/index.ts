@@ -1,6 +1,7 @@
 import { Router } from "express";
 import serviceRoutes from "./service.route";
 import credentialRoutes from "./credentials.route"
+import configurationRoutes from "./configuration.route"
 import bankRoutes from "./bank.routes";
 import { fileURLToPath } from "url";
 import path from "path";
@@ -10,6 +11,7 @@ const router = Router();
 router.use("/banks", bankRoutes);
 router.use("/services", serviceRoutes);
 router.use("/credentials", credentialRoutes)
+router.use("/configurations", configurationRoutes)
 
 // Serve static files from the uploads folder
 const __filename = fileURLToPath(import.meta.url);
