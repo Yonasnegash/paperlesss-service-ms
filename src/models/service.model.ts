@@ -9,7 +9,9 @@ const ServiceSchema = new Schema<IService>(
     expectedResponseTime: { type: Number, required: true },
     checkerRequiredAmount: { type: Number },
     description: { type: String },
-    isActive: { type: Boolean, default: true }
+    isActive: { type: Boolean, default: true },
+    number: { type: Number },
+    url: { type: String }
   },
   { timestamps: true }
 );

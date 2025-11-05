@@ -1,8 +1,9 @@
 import mongoose from "mongoose"
 import { ICategory } from "../config/types/service_category"
 import { ServiceCategory } from "../models/service_category.model"
-import { PaperlessSubService } from "../models/sub_service.model"
 import { ApiError } from "../utils/ApiError"
+import { IService } from "../config/types/service"
+import { Service } from "../models/service.model"
 
 const fetchCategoryServices = async () => {
     const services = await ServiceCategory.aggregate([
@@ -50,7 +51,7 @@ const createCategoryServices = async (data: ICategory) => {
 const updateCategoryService = async (id: string | mongoose.Types.ObjectId, data: ICategory) => {
     const category = await ServiceCategory.findById(id)
     if (!category) {
-        throw new ApiError(400, `Service category with id '${id}' not found.`)
+        throw new ApiError(404, `Service category with id '${id}' not found.`)
     }
 
     if (data.name) {
@@ -82,7 +83,7 @@ const updateCategoryService = async (id: string | mongoose.Types.ObjectId, data:
 const toggleCategoryServiceStatus = async (id: string | mongoose.Types.ObjectId) => {
     const category = await ServiceCategory.findById(id)
     if (!category) {
-        throw new ApiError(400, 'No Service category found')
+        throw new ApiError(404, 'No Service category found')
     }
 
     const status = category.isActive === true ? false : true
@@ -90,13 +91,54 @@ const toggleCategoryServiceStatus = async (id: string | mongoose.Types.ObjectId)
 }
 
 const fetchServices = async () => {
-    return await PaperlessSubService.find().populate('service_id')
+    return await Service.find().populate('serviceCategory')
+}
+
+const createService = async (data: IService) => {
+    const category = await ServiceCategory.findById((data.serviceCategory) as mongoose.Types.ObjectId)
+    if (!category) {
+        throw new ApiError(404, "Service category not found")
+    }
+
+    const isBillPayment = category.name === 'Bill Payment'
+
+    if (isBillPayment) {
+        if (!data.url) {
+            throw new ApiError(400, "Bill Payment service must include a 'url'")
+        }
+    } else {
+        if (data.url) {
+            throw new ApiError(400, "Only Bill Payment services can include a 'url'")
+        }
+        if (data.number == null) {
+            throw new ApiError(400, "Non-Bill Payment services must include a 'number'")
+        }
+    }
+    
+    return await Service.create(data)
+}
+
+const updateService = async (id: mongoose.Types.ObjectId | string, data: IService) => {
+
+}
+
+const changeServiceStatus = async (id: mongoose.Types.ObjectId | string) => {
+    const service = await Service.findById(id)
+    if (!service) {
+        throw new ApiError(404, "Service not found")
+    }
+
+    const status = service.isActive === true ? false : true
+    return await Service.findOneAndUpdate({_id: id}, { isActive: status }, { new: true })
 }
 
 export const serviceDal = {
     fetchCategoryServices,
     createCategoryServices,
-    fetchServices,
     updateCategoryService,
-    toggleCategoryServiceStatus
+    toggleCategoryServiceStatus,
+    fetchServices,
+    createService,
+    updateService,
+    changeServiceStatus
 }

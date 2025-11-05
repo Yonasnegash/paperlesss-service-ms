@@ -8,4 +8,6 @@ export interface IService extends Document {
     description: string
     checkerRequiredAmount: number
     isActive: boolean
+    number: number
+    url: string
 }
