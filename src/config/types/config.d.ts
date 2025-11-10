@@ -5,6 +5,9 @@ export interface TopLevelConfig {
   PORT_PAPERLESS_SERVICES: string;
   PORT_PAPERLESS_BANKING: string;
   PORT_PAPERLESS_NOTIFICATION: string;
+  MONGODB_PAPERLESS_URL: string;
+  PORT_PAPERLESS: string;
+  PAPERLESS_CREDENTIAL_SECRET_KEY: string
   _JWTSECRET: string;
   _JWTEXPIREY: string;
   _TEMPSESSIONTIMEOUT: string;

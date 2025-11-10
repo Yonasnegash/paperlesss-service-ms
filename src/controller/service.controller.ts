@@ -1,6 +1,42 @@
 import { NextFunction, Request, Response } from "express"
 import { serviceDal } from "../dal/service.dal"
 
+const getCategoryServices = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const services = await serviceDal.fetchCategoryServices()
+        return res.status(200).json({ message: 'Success', data: services, status: 200 })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const createCategoryServices = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await serviceDal.createCategoryServices(req.body)
+        return res.status(201).json({ message: 'Success', status: 201 })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const updateCategoryService = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await serviceDal.updateCategoryService(req.params.id, req.body)
+        return res.status(200).json({ message: 'Success', status: 200 })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const toggleCategoryServiceStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await serviceDal.toggleCategoryServiceStatus(req.params.id)
+        return res.status(200).json({ message: 'Success', status: 200 })
+    } catch (error) {
+        next(error)
+    }
+}
+
 const getServices = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const services = await serviceDal.fetchServices()
@@ -10,16 +46,41 @@ const getServices = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-const getSubServices = async (req: Request, res: Response, next: NextFunction) => {
+const createService = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const subServices = await serviceDal.fetchSubServices()
-        return res.status(200).json({ message: 'Success', data: subServices, status: 200 })
+        console.log('req.body')
+        await serviceDal.createService(req.body)
+        return res.status(201).json({ message: 'Success', status: 201 })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const updateService = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await serviceDal.updateService(req.params.id, req.body)
+        return res.status(200).json({ message: 'Success', status: 200 })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const changeServiceStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await serviceDal.changeServiceStatus(req.params.id)
+        return res.status(200).json({ message: 'Success', status: 200 })
     } catch (error) {
         next(error)
     }
 }
 
 export const serviceController = {
+    getCategoryServices,
+    createCategoryServices,
+    updateCategoryService,
+    toggleCategoryServiceStatus,
     getServices,
-    getSubServices
+    createService,
+    updateService,
+    changeServiceStatus
 }

@@ -4,8 +4,14 @@ import type { IService } from "../config/types/service";
 
 const ServiceSchema = new Schema<IService>(
   {
-    title: { type: String, required: true, unique: true },
-    number: { type: Number, required: true, unique: true },
+    name: { type: String, required: true, unique: true },
+    serviceCategory: { type: Schema.Types.ObjectId, ref: 'ServiceCategory', required: true },
+    expectedResponseTime: { type: Number, required: true },
+    checkerRequiredAmount: { type: Number },
+    description: { type: String },
+    isActive: { type: Boolean, default: true },
+    number: { type: Number },
+    url: { type: String }
   },
   { timestamps: true }
 );
@@ -28,7 +34,7 @@ ServiceSchema.pre<IService>(
   }
 );
 
-export const PaperlessService = mongoose.model<IService>(
-  "PaperlessService",
+export const Service = mongoose.model<IService>(
+  "Service",
   ServiceSchema
 );

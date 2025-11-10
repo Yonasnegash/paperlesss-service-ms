@@ -13,10 +13,10 @@ import { TopLevelConfig } from "./config/types/config";
 import initConfig from "./config";
 import mongoDB from "./mongoDB/mongoDB";
 import router from "./api";
-import { seedServices } from "./lib/serviceSeeder";
 import { errorHandler, successHandler } from "./config/morgan";
 import { errHandler, errorConverter } from "./lib/error";
 import { connectProducer } from "./lib/kafkaProducer";
+import { seedConfiguration } from "./lib/configuration.seeder";
 
 // Load Environment Variables
 
@@ -83,13 +83,13 @@ const initApp = async () => {
 
     global._CONFIG = _CONFIG;
 
-    app.listen(_CONFIG.PORT_PAPERLESS, async () => {
+    app.listen(_CONFIG.PORT_PAPERLESS_SERVICES, async () => {
       console.log(
-        chalk.blue.italic(`Server listening on port ${_CONFIG.PORT_PAPERLESS}`)
+        chalk.blue.italic(`Server listening on port ${_CONFIG.PORT_PAPERLESS_SERVICES}`)
       );
       await connectProducer();
     });
-    void seedServices();
+    void seedConfiguration();
   } catch (error) {
     console.error("Failed to load configuration and start the server:", error);
   }
