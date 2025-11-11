@@ -7,8 +7,8 @@ import { branch_schema } from "../../validations/branch.validation";
 const router = Router()
 
 // Credentials route
-router.get('/', credentialController.getCredentials as RequestHandler)
-router.post('/generate', validate_payload(branch_schema, "body"), credentialController.generateCredential as RequestHandler)
-router.get('/:id', credentialController.viewCredential as RequestHandler)
+router.get('/', authMiddleware, credentialController.getCredentials as RequestHandler)
+router.post('/generate', authMiddleware, validate_payload(branch_schema, "body"), credentialController.generateCredential as RequestHandler)
+router.get('/:id', authMiddleware, credentialController.viewCredential as RequestHandler)
 
 export default router

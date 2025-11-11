@@ -7,8 +7,8 @@ import { configuration_edit_schema } from "../../validations/configuration.valid
 const router = Router()
 
 // Configuration routes
-router.get('/', configurationController.getConfigurations as RequestHandler)
-router.patch('/', validate_payload(configuration_edit_schema, "body"), configurationController.updateConfiguration as RequestHandler)
-router.patch('/change-status/:id', configurationController.changeConfigurationStatus as RequestHandler)
+router.get('/', authMiddleware, configurationController.getConfigurations as RequestHandler)
+router.patch('/', authMiddleware, validate_payload(configuration_edit_schema, "body"), configurationController.updateConfiguration as RequestHandler)
+router.patch('/change-status/:id', authMiddleware, configurationController.changeConfigurationStatus as RequestHandler)
 
 export default router
