@@ -17,10 +17,12 @@ import { errorHandler, successHandler } from "./config/morgan";
 import { errHandler, errorConverter } from "./lib/error";
 import { connectProducer } from "./lib/kafkaProducer";
 import { seedConfiguration } from "./lib/configuration.seeder";
+import { seedServicesCategory } from "./lib/serviceSeeder";
 
 // Load Environment Variables
 
 dotenv.config();
+const SEED_DB = true
 
 // Handle Unhandled Rejections and Exceptions
 
@@ -90,6 +92,9 @@ const initApp = async () => {
       await connectProducer();
     });
     void seedConfiguration();
+    if (SEED_DB) {
+      void seedServicesCategory()
+    }
   } catch (error) {
     console.error("Failed to load configuration and start the server:", error);
   }
