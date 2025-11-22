@@ -1,0 +1,51 @@
+stages:
+  - prepare
+  - deploy
+
+variables:
+  APP_DIR: "/data/UAT/paperless/superapp-paperless-services"
+  SERVICE_NAME: "paperless-services"
+  DEPLOY_BRANCH: "dev"
+
+default:
+  tags:
+    - uat
+  before_script:
+    - set -e
+    - cd $APP_DIR
+    - pwd
+
+cache:
+  paths:
+    - node_modules/
+
+prepare-job:
+  stage: prepare
+  script:
+    - echo "Preparing application..."
+    - git fetch --all
+    - git reset --hard origin/$DEPLOY_BRANCH
+    - echo $(which node)
+    - npm ci
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $DEPLOY_BRANCH'
+
+deploy-job:
+  stage: deploy
+  script:
+    - echo "Deploying application..."
+    - |
+      services=("$SERVICE_NAME")
+      for service in "${services[@]}"; do
+        if pm2 describe "$service" > /dev/null; then
+          echo "Restarting $service"
+          pm2 restart "$service"
+        else
+          echo "Starting $service"
+          pm2 start "npm run dev" --name "$service"
+        fi
+      done
+    - pm2 save
+    - echo "Application successfully deployed."
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $DEPLOY_BRANCH'
