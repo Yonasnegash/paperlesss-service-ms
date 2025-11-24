@@ -22,7 +22,7 @@ const fetchCategoryServices = async () => {
 
     return services.map(service => ({
         ...service,
-        paperlesssubservices: service.paperlesssubservices.map((sub: any) => ({
+        services: service.services.map((sub: any) => ({
             ...sub,
             url: sub.url ? `${_CONFIG.CPS_PUBLIC_ASSET_DOMAIN}/v1.0/paperless${sub.url}` : null
         }))
