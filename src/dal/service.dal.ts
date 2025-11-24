@@ -11,7 +11,7 @@ const fetchCategoryServices = async () => {
             $lookup: {
                 from: 'paperlesssubservices',
                 localField: '_id',
-                foreignField: 'service_id',
+                foreignField: 'serviceCategory',
                 as: 'paperlesssubservices'
             }
         },
