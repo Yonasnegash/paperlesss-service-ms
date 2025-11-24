@@ -17,6 +17,6 @@ router.patch('/categories/change-status/:id', authMiddleware, serviceController.
 router.get('/', authMiddleware, serviceController.getServices as RequestHandler)
 router.post('/', authMiddleware, validate_payload(service_schema, "body"), serviceController.createService as RequestHandler)
 router.patch('/:id', authMiddleware, serviceController.updateService as RequestHandler)
-router.patch('/change-status', authMiddleware, serviceController.changeServiceStatus as RequestHandler)
+router.patch('/change-status/:id', authMiddleware, serviceController.changeServiceStatus as RequestHandler)
 
 export default router
