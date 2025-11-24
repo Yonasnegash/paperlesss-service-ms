@@ -9,10 +9,10 @@ const fetchCategoryServices = async () => {
     const services = await ServiceCategory.aggregate([
         {
             $lookup: {
-                from: 'paperlesssubservices',
+                from: 'services',
                 localField: '_id',
                 foreignField: 'serviceCategory',
-                as: 'paperlesssubservices'
+                as: 'services'
             }
         },
         {
