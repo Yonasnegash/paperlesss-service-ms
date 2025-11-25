@@ -4,6 +4,7 @@ import { ServiceCategory } from "../models/service_category.model"
 import { ApiError } from "../utils/ApiError"
 import { IService } from "../config/types/service"
 import { Service } from "../models/service.model"
+import { Configuration } from "../models/configuration.model"
 
 const fetchCategoryServices = async (page: number, limit: number, search?: string) => {
     let query: any = {}
@@ -137,8 +138,25 @@ const fetchServices = async (page: number, limit: number, search: string) => {
     const skip = (page - 1) * limit
     const totalItems = await Service.countDocuments(query)
     const services = await Service.find(query).skip(skip).limit(limit).populate('serviceCategory', 'name').select('-__v')
+    
+    const configs = await Configuration.find({ isActive: true })
+    const warningConfig = configs.find(c => c.flagType === 'WARNING')
+    
+    const servicesWithFlags = services.map(service => {
+        const expectedTime = service.expectedResponseTime
+        const warningStart = expectedTime * (warningConfig?.range.start || 50) / 100
+        const warningEnd = expectedTime * (warningConfig?.range.end || 100) / 100
+        
+        return {
+            ...service.toObject(),
+            criticalFlagTime: `Above ${expectedTime} Min`,
+            warningFlagTime: `${warningStart} Min - ${warningEnd} Min`,
+            normalFlagTime: `Below ${warningStart} Min`
+        }
+    })
+    
     return {
-        services,
+        services: servicesWithFlags,
         totalItems,
         pages: Math.ceil(totalItems / limit),
         page: page,
@@ -171,7 +189,22 @@ const createService = async (data: IService) => {
 }
 
 const updateService = async (id: mongoose.Types.ObjectId | string, data: IService) => {
+    const existingName = await Service.findOne({ name: data.name, _id: { $ne: id } })
+    const existingNumber = await Service.findOne({ number: data.number, _id: { $ne: id }})
 
+    if (existingName) { throw new ApiError(400, `Service with name ${data.name} already exists.`)}
+
+    if (existingNumber) { throw new ApiError(400, `Service with number ${data.number} already exists.`)}
+
+    const updatedService = await Service.findByIdAndUpdate(
+        id, 
+        data,
+        { new: true, runValidators: true }
+    )
+
+    if (!updatedService) { throw new ApiError(400, 'Service not found')}
+
+    return updateService
 }
 
 const changeServiceStatus = async (id: mongoose.Types.ObjectId | string) => {
