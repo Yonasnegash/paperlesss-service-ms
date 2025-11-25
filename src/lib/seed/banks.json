@@ -1,0 +1,572 @@
+[
+    {
+        "bankName": "Hibret Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/hibretbank-1725875308215.png",
+        "bankCode": "231408",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "UNTDETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Commercial Bank of Ethiopias",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/commercialbankofethiopia-1725875345841.png",
+        "bankCode": "231402",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "CBETETA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Awash Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/awashinternationalbank-1725875391335.png",
+        "bankCode": "231404",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "AWINETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Bank of Abyssinia",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/bankofabyssinia-1725875451104.png",
+        "bankCode": "231406",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "ABSCETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Wegagen Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/wegagenbank-1725875482655.png",
+        "bankCode": "231407",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "WEGAETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Nib Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/nibinternationalbank-1725875589440.png",
+        "bankCode": "231409",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "NIBIETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Cooperative Bank of Oromia",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/cooperativebankoforomia-1725876125810.png",
+        "bankCode": "231410",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "CBORETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Zemen Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/zemenbank-1725876152010.png",
+        "bankCode": "231412",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "ZEMEETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Berhan Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/berhaninternationalbank-1725876176955.png",
+        "bankCode": "231415",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "BERHETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Abay Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/abaybank-1725876204039.png",
+        "bankCode": "231416",
+        "enabled": false,
+        "isDeleted": false,
+        "bankBCI": "ABAYETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Amhara Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/amharabank-1725876236397.png",
+        "bankCode": "231448",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "AMHRETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Addis Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/addisinternationalbank-1725876267074.png",
+        "bankCode": "231417",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "ABSCETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Tsedey Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/tsedaybank-1725876290424.png",
+        "bankCode": "231456",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "TSDYETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Gadaa Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/gadaabank-1725876327241.png",
+        "bankCode": "231457",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "GDAAETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "ZamZam Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/zamzambank-1725876360253.png",
+        "bankCode": "231428",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "ZAMZETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Anbesa Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/anbesabank-1725880892938.png",
+        "bankCode": "231443",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "LIBSETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Sidama Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/sidamabank-1725880925039.png",
+        "bankCode": "231461",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "SDMAETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Bunna Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/bunnabank-1725880951128.png",
+        "bankCode": "231414",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "BUNAETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Tsehay Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/tsehaybank-1725880990459.png",
+        "bankCode": "23143200",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "TSCPETAA",
+        "IPSEnabled": true,
+        "IPSBank": false
+    },
+    {
+        "bankName": "Ahadu Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/ahadubank-1725881013766.png",
+        "bankCode": "231431",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "AHUUETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Global Bank Ethiopia",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/dgbbank-1725881086055.png",
+        "bankCode": "231418",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "DEGAETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "GOH Betoch Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/gohbetoch-1725881132911.png",
+        "bankCode": "231444",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "GOBTETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Enat Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/enatbank-1725881393398.png",
+        "bankCode": "231419",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "ENATETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "YaYa Wallet",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/yayawallet-1726819665862.png",
+        "bankCode": "231466",
+        "enabled": false,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Sahal MFI",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/sahalmfi-1726819688795.png",
+        "bankCode": "231462",
+        "enabled": false,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "VisionFund MFI",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/visionfundmfi-1726819709743.png",
+        "bankCode": "231465",
+        "enabled": true,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Shebelle Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/shebellebank-1726819740006.png",
+        "bankCode": "231436",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "SBEEETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Hijra Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/hijrabank-1726819840038.png",
+        "bankCode": "231427",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "HIJRETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Kacha DFS",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/kachadfs-1726819892144.png",
+        "bankCode": "231442",
+        "enabled": true,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "One Micro Finance",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/onemicrofinance-1726820030091.png",
+        "bankCode": "231441",
+        "enabled": true,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "KAAFI Micro Finance",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/kaafimicrofinance-1726820087328.png",
+        "bankCode": "231438",
+        "enabled": true,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Rays Micro Finance",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/raysmicrofinance-1726820111411.png",
+        "bankCode": "231426",
+        "enabled": false,
+        "isDeleted": false,
+        "bankBCI": "RMFIETA2",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Somali Micro Finance",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/somalimicrofinance-1726820139388.png",
+        "bankCode": "231421",
+        "enabled": true,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Oromia Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/oromiabank-1726820875619.png",
+        "bankCode": "231460",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "ORIRETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "CBE Birr",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/cbebirr-1726820995286.png",
+        "bankCode": "231439",
+        "enabled": true,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Sinqee Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/sinqeebank-1733308796591.png",
+        "bankCode": "231430",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "SINQETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Dire MFIi",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/diremfi-1726904398116.png",
+        "bankCode": "231451",
+        "enabled": true,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Halal Pay",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/halalpay-1726932276894.png",
+        "bankCode": "231463",
+        "enabled": true,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Rammis Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/rammisbank-1728894504197.png",
+        "bankCode": "231467",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "RMSIETAA",
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "IPS Test Bank",
+        "bankLogo": "",
+        "bankCode": "00001111",
+        "enabled": true,
+        "isDeleted": false,
+        "bankBCI": "ETSETAA",
+        "IPSEnabled": true,
+        "IPSBank": false
+    },
+    {
+        "bankName": "roman Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/romanbank-1733743615989.png",
+        "bankCode": "231446",
+        "enabled": false,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "Siket Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/siketbank-1733833144307.png",
+        "bankCode": "231458",
+        "enabled": false,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "new",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/new-1735880748421.png",
+        "bankCode": "123123",
+        "enabled": false,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "ABC",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/abc-1736332681518.png",
+        "bankCode": "123456",
+        "enabled": true,
+        "isDeleted": false,
+        "IPSEnabled": true
+    },
+    {
+        "bankName": "nnnn",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/nnnn-1748521715747.png",
+        "bankCode": "100",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1749794585859.png",
+        "bankCode": "12344321",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1750955079085.png",
+        "bankCode": "610446",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "nxnx",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/nxnx-1750949805560.png",
+        "bankCode": "nxnxn",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1750949232734.png",
+        "bankCode": "947407",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1750952375689.png",
+        "bankCode": "609533",
+        "enabled": true,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1751006771004.png",
+        "bankCode": "365340",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1753468764588.png",
+        "bankCode": "772932",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1751014182523.png",
+        "bankCode": "568325",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1751088774806.png",
+        "bankCode": "757099",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1751093129416.png",
+        "bankCode": "158094",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1751360803603.png",
+        "bankCode": "812208",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1751361489717.png",
+        "bankCode": "700203",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1751364211186.png",
+        "bankCode": "610985",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1751364284421.png",
+        "bankCode": "726343",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "QA BANK",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/qabank-1751372703096.png",
+        "bankCode": "333355",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "test",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/test-1751373135488.png",
+        "bankCode": "test",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "Test  Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/habtambank-1753429216264.png",
+        "bankCode": "122345",
+        "enabled": false,
+        "isDeleted": false
+    },
+    {
+        "bankName": "Omo Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/omobank-1753446470874.png",
+        "bankCode": "231469",
+        "enabled": true,
+        "isDeleted": false
+    },
+    {
+        "bankName": "Siket Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/siketbank-1753446601588.png",
+        "bankCode": "231470",
+        "enabled": true,
+        "isDeleted": false
+    },
+    {
+        "bankName": "dalas",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/dalas-1754556965218.png",
+        "bankCode": "5422",
+        "enabled": true,
+        "isDeleted": false
+    },
+    {
+        "bankName": "Wegagen-E birr",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/wegagen-ebirr-1756192432123.png",
+        "bankCode": "23333",
+        "bankBCI": "EBIRETAA",
+        "IPSEnabled": true,
+        "enabled": true,
+        "isDeleted": false
+    },
+    {
+        "bankName": "IPS only Bank",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/ipsonlybank-1762369138581.png",
+        "bankCode": "3844",
+        "bankBCI": "BERHETAA",
+        "IPSBank": true,
+        "IPSEnabled": true,
+        "enabled": true,
+        "isDeleted": false
+    },
+    {
+        "bankName": "tsehay",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/tsehay-1762418416773.png",
+        "bankCode": "2314320",
+        "bankBCI": "TSCPETAA",
+        "IPSBank": true,
+        "IPSEnabled": true,
+        "enabled": true,
+        "isDeleted": false
+    },
+    {
+        "bankName": "IPS Only Test",
+        "bankLogo": "https://sau.eaglelionsystems.com/v1.0/chatbirrapi/public/assets/images/banklogo/ipsonlytest-1762518213941.png",
+        "bankCode": "000011119",
+        "bankBCI": "TSCPETAA",
+        "IPSBank": false,
+        "IPSEnabled": true,
+        "enabled": true,
+        "isDeleted": false
+    }
+]

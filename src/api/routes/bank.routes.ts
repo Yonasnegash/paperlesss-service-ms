@@ -9,7 +9,7 @@ const router = Router();
 
 router.get("/health-check", transferController.healthCheck);
 router.get(
-  "/banks/fetch/all",
+  "/fetch/all",
   validate_payload(query_validation, "query"),
   authMiddleware,
   transferController.fetchBanksList

@@ -14,6 +14,9 @@ export interface IBank {
   bankCode: string;
   bankBCI?: string;
 
+  ipsEnabled?: boolean;
+  ipsBank?: boolean
+
   enabled?: boolean;
   isDeleted?: boolean;
 
