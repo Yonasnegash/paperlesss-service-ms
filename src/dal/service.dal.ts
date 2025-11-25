@@ -5,31 +5,21 @@ import { ApiError } from "../utils/ApiError"
 import { IService } from "../config/types/service"
 import { Service } from "../models/service.model"
 
-const fetchCategoryServices = async (page: number, limit: number, source?: string, search?: string) => {
+const fetchCategoryServices = async (page: number, limit: number, search?: string) => {
     let query: any = {}
     const skip = (page - 1) * limit
-    const totalItems = await ServiceCategory.countDocuments()
     
-    if (source === 'portal') {
-        if (search) {
-            query = {
-                $or: [
-                    { name: { $regex: search, $options: 'i' } },
-                ]
-            }
-        }
-                
-        const categories = await ServiceCategory.find(query).sort({ number: 1 }).skip(skip).limit(limit)
-        return {
-            categories,
-            totalItems: categories.length,
-            pages: Math.ceil(totalItems / limit),
-            page: page,
-            limit: limit
+    if (search) {
+        query = {
+            $or: [
+                { name: { $regex: search, $options: 'i' } },
+            ]
         }
     }
 
-    const services = await ServiceCategory.aggregate([
+    const totalItems = await ServiceCategory.countDocuments(query)
+
+    const pipeline: any[] = [
         {
             $lookup: {
                 from: 'services',
@@ -40,16 +30,36 @@ const fetchCategoryServices = async (page: number, limit: number, source?: strin
         },
         {
             $sort: { number: 1 }
+        },
+        {
+            $skip: skip
+        },
+        {
+            $limit: limit
         }
-    ])
+    ]
 
-    return services.map((service) => ({
+    if (search) {
+        pipeline.unshift({ $match: query })
+    }
+
+    const services = await ServiceCategory.aggregate(pipeline)
+
+    const data = services.map((service) => ({
         ...service,
         services: service.services.map((sub: any) => ({
             ...sub,
             url: sub.url ? `${_CONFIG.CPS_PUBLIC_ASSET_DOMAIN}/v1.0/paperless${sub.url}` : null
         }))
     }))
+
+    return {
+        data,
+        totalItems,
+        pages: Math.ceil(totalItems / limit),
+        page: page,
+        limit: limit
+    }
 }
 
 const createCategoryServices = async (data: ICategory) => {
