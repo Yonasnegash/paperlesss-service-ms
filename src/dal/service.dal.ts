@@ -5,7 +5,30 @@ import { ApiError } from "../utils/ApiError"
 import { IService } from "../config/types/service"
 import { Service } from "../models/service.model"
 
-const fetchCategoryServices = async () => {
+const fetchCategoryServices = async (page: number, limit: number, source?: string, search?: string) => {
+    let query: any = {}
+    const skip = (page - 1) * limit
+    const totalItems = await ServiceCategory.countDocuments()
+    
+    if (source === 'portal') {
+        if (search) {
+            query = {
+                $or: [
+                    { name: { $regex: search, $options: 'i' } },
+                ]
+            }
+        }
+                
+        const categories = await ServiceCategory.find(query).sort({ number: 1 }).skip(skip).limit(limit)
+        return {
+            categories,
+            totalItems: categories.length,
+            pages: Math.ceil(totalItems / limit),
+            page: page,
+            limit: limit
+        }
+    }
+
     const services = await ServiceCategory.aggregate([
         {
             $lookup: {
@@ -20,7 +43,7 @@ const fetchCategoryServices = async () => {
         }
     ])
 
-    return services.map(service => ({
+    return services.map((service) => ({
         ...service,
         services: service.services.map((sub: any) => ({
             ...sub,
@@ -90,8 +113,27 @@ const toggleCategoryServiceStatus = async (id: string | mongoose.Types.ObjectId)
     return await ServiceCategory.findOneAndUpdate({_id: id}, { isActive: status }, { new: true })
 }
 
-const fetchServices = async () => {
-    return await Service.find().populate('serviceCategory')
+const fetchServices = async (page: number, limit: number, search: string) => {
+    let query: any = {}
+
+    if (search) {
+        query = {
+            $or: [
+                { name: { $regex: search, $options: 'i' } },
+            ]
+        }
+    }
+
+    const skip = (page - 1) * limit
+    const totalItems = await Service.countDocuments(query)
+    const services = await Service.find(query).skip(skip).limit(limit).populate('serviceCategory', 'name').select('-__v')
+    return {
+        services,
+        totalItems,
+        pages: Math.ceil(totalItems / limit),
+        page: page,
+        limit: limit
+    }
 }
 
 const createService = async (data: IService) => {

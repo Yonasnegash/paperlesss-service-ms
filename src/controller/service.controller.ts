@@ -3,7 +3,10 @@ import { serviceDal } from "../dal/service.dal"
 
 const getCategoryServices = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const services = await serviceDal.fetchCategoryServices()
+        const { source, search } = req.query
+        const page = parseInt(req.query.page as string) || 1
+        const limit = parseInt(req.query.limit as string) || 10
+        const services = await serviceDal.fetchCategoryServices(page, limit, source as string, search as string)
         return res.status(200).json({ message: 'Success', data: services, status: 200 })
     } catch (error) {
         next(error)
@@ -39,7 +42,10 @@ const toggleCategoryServiceStatus = async (req: Request, res: Response, next: Ne
 
 const getServices = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const services = await serviceDal.fetchServices()
+        const { search } = req.query
+        const page = parseInt(req.query.page as string) || 1
+        const limit = parseInt(req.query.limit as string) || 10
+        const services = await serviceDal.fetchServices(page, limit, search as string)
         return res.status(200).json({ message: 'Success', data: services, status: 200 })
     } catch (error) {
         next(error)
