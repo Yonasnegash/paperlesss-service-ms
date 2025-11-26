@@ -49,7 +49,9 @@ const fetchCategoryServices = async (page: number, limit: number, search?: strin
     const data = services.map((service) => ({
         ...service,
         services: service.services.map((sub: any) => ({
-            ...sub,
+            _id: sub._id,
+            name: sub.name,
+            number: sub.number,
             url: sub.url ? `${_CONFIG.CPS_PUBLIC_ASSET_DOMAIN}/v1.0/paperless${sub.url}` : null
         }))
     }))
@@ -170,6 +172,11 @@ const createService = async (data: IService) => {
         throw new ApiError(404, "Service category not found")
     }
 
+    const existingName = await Service.findOne({ name: data.name })
+    if (existingName) {
+        throw new ApiError(400, `Service with name '${data.name}' already exists.`)
+    }
+
     const isBillPayment = category.name === 'Bill Payment'
 
     if (isBillPayment) {
@@ -183,6 +190,11 @@ const createService = async (data: IService) => {
         if (data.number == null) {
             throw new ApiError(400, "Non-Bill Payment services must include a 'number'")
         }
+
+        const existingNumber = await Service.findOne({ number: data.number, serviceCategory: data.serviceCategory })
+        if (existingNumber) {
+            throw new ApiError(400, `Service with number '${data.number}' already exists in this category.`)
+        }
     }
     
     return await Service.create(data)
@@ -190,11 +202,11 @@ const createService = async (data: IService) => {
 
 const updateService = async (id: mongoose.Types.ObjectId | string, data: IService) => {
     const existingName = await Service.findOne({ name: data.name, _id: { $ne: id } })
-    const existingNumber = await Service.findOne({ number: data.number, _id: { $ne: id }})
+    const existingNumber = await Service.findOne({ number: data.number, serviceCategory: data.serviceCategory, _id: { $ne: id }})
 
     if (existingName) { throw new ApiError(400, `Service with name ${data.name} already exists.`)}
 
-    if (existingNumber) { throw new ApiError(400, `Service with number ${data.number} already exists.`)}
+    if (existingNumber) { throw new ApiError(400, `Service with number ${data.number} already exists in this category.`)}
 
     const updatedService = await Service.findByIdAndUpdate(
         id, 

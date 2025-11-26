@@ -5,6 +5,6 @@ export const service_schema = Joi.object({
   serviceCategory: Joi.string().required(),
   expectedResponseTime: Joi.number().positive().required(),
   description: Joi.string().optional(),
-  number: Joi.number().positive().optional(),
+  number: Joi.number().positive().required(),
   url: Joi.string().optional()
 });
