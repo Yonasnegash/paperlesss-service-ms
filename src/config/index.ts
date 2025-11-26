@@ -28,6 +28,7 @@ const getConfig = (config: TopLevelConfig) => ({
   // MONGODB_URL: 'mongodb://10.1.15.163/CBEIB-Sandbox-DB',
   MONGODB_URL: config.MONGODB_URL as string,
   MONGODB_PAPERLESS_URL: config.MONGODB_PAPERLESS_URL as string,
+  PAPERLESS_LOGS_BASE_URL: config.PAPERLESS_LOGS_BASE_URL as string,
   MINIO_ENDPOINT: config.MINIO_ENDPOINT as string,
   PAPERLESS_ASSETS_BASE_URL: config.PAPERLESS_ASSETS_BASE_URL as string,
   PORT_MINIO: config.PORT_MINIO as number,
