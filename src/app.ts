@@ -18,6 +18,7 @@ import { errHandler, errorConverter } from "./lib/error";
 import { connectProducer } from "./lib/kafkaProducer";
 import { seedConfiguration } from "./lib/configuration.seeder";
 import { seedServicesCategory } from "./lib/serviceSeeder";
+import { seedBanks } from "./lib/bankSeeder";
 
 // Load Environment Variables
 
@@ -92,6 +93,7 @@ const initApp = async () => {
       await connectProducer();
     });
     void seedConfiguration();
+    void seedBanks()
     if (SEED_DB) {
       void seedServicesCategory()
     }

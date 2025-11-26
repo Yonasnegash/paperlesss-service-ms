@@ -10,6 +10,8 @@ const OtbankSchema = new Schema(
     bankLogo: { type: String },
     bankCode: { type: String },
     bankBCI: { type: String },
+    ipsEnabled: { type: Boolean, default: false },
+    ipsBank: { type: Boolean, default: true },
     enabled: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
   },

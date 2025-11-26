@@ -4,9 +4,23 @@ import { ServiceCategory } from "../models/service_category.model"
 import { ApiError } from "../utils/ApiError"
 import { IService } from "../config/types/service"
 import { Service } from "../models/service.model"
+import { Configuration } from "../models/configuration.model"
 
-const fetchCategoryServices = async () => {
-    const services = await ServiceCategory.aggregate([
+const fetchCategoryServices = async (page: number, limit: number, search?: string) => {
+    let query: any = {}
+    const skip = (page - 1) * limit
+    
+    if (search) {
+        query = {
+            $or: [
+                { name: { $regex: search, $options: 'i' } },
+            ]
+        }
+    }
+
+    const totalItems = await ServiceCategory.countDocuments(query)
+
+    const pipeline: any[] = [
         {
             $lookup: {
                 from: 'services',
@@ -17,16 +31,38 @@ const fetchCategoryServices = async () => {
         },
         {
             $sort: { number: 1 }
+        },
+        {
+            $skip: skip
+        },
+        {
+            $limit: limit
         }
-    ])
+    ]
 
-    return services.map(service => ({
+    if (search) {
+        pipeline.unshift({ $match: query })
+    }
+
+    const services = await ServiceCategory.aggregate(pipeline)
+
+    const data = services.map((service) => ({
         ...service,
         services: service.services.map((sub: any) => ({
-            ...sub,
+            _id: sub._id,
+            name: sub.name,
+            number: sub.number,
             url: sub.url ? `${_CONFIG.CPS_PUBLIC_ASSET_DOMAIN}/v1.0/paperless${sub.url}` : null
         }))
     }))
+
+    return {
+        data,
+        totalItems,
+        pages: Math.ceil(totalItems / limit),
+        page: page,
+        limit: limit
+    }
 }
 
 const createCategoryServices = async (data: ICategory) => {
@@ -90,14 +126,55 @@ const toggleCategoryServiceStatus = async (id: string | mongoose.Types.ObjectId)
     return await ServiceCategory.findOneAndUpdate({_id: id}, { isActive: status }, { new: true })
 }
 
-const fetchServices = async () => {
-    return await Service.find().populate('serviceCategory')
+const fetchServices = async (page: number, limit: number, search: string) => {
+    let query: any = {}
+
+    if (search) {
+        query = {
+            $or: [
+                { name: { $regex: search, $options: 'i' } },
+            ]
+        }
+    }
+
+    const skip = (page - 1) * limit
+    const totalItems = await Service.countDocuments(query)
+    const services = await Service.find(query).skip(skip).limit(limit).populate('serviceCategory', 'name').select('-__v')
+    
+    const configs = await Configuration.find({ isActive: true })
+    const warningConfig = configs.find(c => c.flagType === 'WARNING')
+    
+    const servicesWithFlags = services.map(service => {
+        const expectedTime = service.expectedResponseTime
+        const warningStart = expectedTime * (warningConfig?.range.start || 50) / 100
+        const warningEnd = expectedTime * (warningConfig?.range.end || 100) / 100
+        
+        return {
+            ...service.toObject(),
+            criticalFlagTime: `Above ${expectedTime} Min`,
+            warningFlagTime: `${warningStart} Min - ${warningEnd} Min`,
+            normalFlagTime: `Below ${warningStart} Min`
+        }
+    })
+    
+    return {
+        services: servicesWithFlags,
+        totalItems,
+        pages: Math.ceil(totalItems / limit),
+        page: page,
+        limit: limit
+    }
 }
 
 const createService = async (data: IService) => {
     const category = await ServiceCategory.findById((data.serviceCategory) as mongoose.Types.ObjectId)
     if (!category) {
         throw new ApiError(404, "Service category not found")
+    }
+
+    const existingName = await Service.findOne({ name: data.name })
+    if (existingName) {
+        throw new ApiError(400, `Service with name '${data.name}' already exists.`)
     }
 
     const isBillPayment = category.name === 'Bill Payment'
@@ -113,13 +190,33 @@ const createService = async (data: IService) => {
         if (data.number == null) {
             throw new ApiError(400, "Non-Bill Payment services must include a 'number'")
         }
+
+        const existingNumber = await Service.findOne({ number: data.number, serviceCategory: data.serviceCategory })
+        if (existingNumber) {
+            throw new ApiError(400, `Service with number '${data.number}' already exists in this category.`)
+        }
     }
     
     return await Service.create(data)
 }
 
 const updateService = async (id: mongoose.Types.ObjectId | string, data: IService) => {
+    const existingName = await Service.findOne({ name: data.name, _id: { $ne: id } })
+    const existingNumber = await Service.findOne({ number: data.number, serviceCategory: data.serviceCategory, _id: { $ne: id }})
 
+    if (existingName) { throw new ApiError(400, `Service with name ${data.name} already exists.`)}
+
+    if (existingNumber) { throw new ApiError(400, `Service with number ${data.number} already exists in this category.`)}
+
+    const updatedService = await Service.findByIdAndUpdate(
+        id, 
+        data,
+        { new: true, runValidators: true }
+    )
+
+    if (!updatedService) { throw new ApiError(400, 'Service not found')}
+
+    return updateService
 }
 
 const changeServiceStatus = async (id: mongoose.Types.ObjectId | string) => {

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { ServiceCategory } from "../models/service_category.model";
 import { Service } from "../models/service.model";
 
-const RESET_DB = true
+const RESET_DB = false
 
 const SERVICE_CATEGORY_DATA: any[] = [
     {
