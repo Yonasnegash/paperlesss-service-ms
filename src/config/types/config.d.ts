@@ -1,5 +1,6 @@
 export interface TopLevelConfig {
   MONGODB_URL: string;
+  PAPERLESS_LOGS_BASE_URL: string;
   PORT_PAPERLESS_APPLICATIONS: string;
   PORT_PAPERLESS_AUTH: string;
   PORT_PAPERLESS_SERVICES: string;
