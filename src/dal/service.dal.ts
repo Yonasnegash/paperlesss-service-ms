@@ -6,64 +6,86 @@ import { IService } from "../config/types/service"
 import { Service } from "../models/service.model"
 import { Configuration } from "../models/configuration.model"
 
-const fetchCategoryServices = async (page: number, limit: number, search?: string) => {
-    let query: any = {}
-    const skip = (page - 1) * limit
-    
-    if (search) {
-        query = {
-            $or: [
-                { name: { $regex: search, $options: 'i' } },
-            ]
-        }
-    }
-
-    const totalItems = await ServiceCategory.countDocuments(query)
-
-    const pipeline: any[] = [
+const fetchCategoryServices = async (page: number, limit: number, search?: string, source?: string) => {
+    if (source !== "portal") {
+        const categories = await ServiceCategory.aggregate([
         {
             $lookup: {
-                from: 'services',
-                localField: '_id',
-                foreignField: 'serviceCategory',
-                as: 'services'
-            }
+            from: "services",
+            localField: "_id",
+            foreignField: "serviceCategory",
+            as: "services",
+            },
         },
-        {
-            $sort: { number: 1 }
-        },
-        {
-            $skip: skip
-        },
-        {
-            $limit: limit
-        }
-    ]
+        { $sort: { number: 1 } },
+        ]);
 
-    if (search) {
-        pipeline.unshift({ $match: query })
-    }
-
-    const services = await ServiceCategory.aggregate(pipeline)
-
-    const data = services.map((service) => ({
-        ...service,
-        services: service.services.map((sub: any) => ({
+        const data = categories.map((category: any) => ({
+        ...category,
+        services: category.services.map((sub: any) => ({
             _id: sub._id,
             name: sub.name,
             number: sub.number,
-            url: sub.url ? `${_CONFIG.CPS_PUBLIC_ASSET_DOMAIN}/v1.0/paperless${sub.url}` : null
-        }))
-    }))
+            url: sub.url
+            ? `${_CONFIG.CPS_PUBLIC_ASSET_DOMAIN}/v1.0/paperless${sub.url}`
+            : null,
+        })),
+        }));
+
+        return data
+    }
+    
+    let query: any = {};
+    const skip = (page - 1) * limit;
+
+    if (search) {
+        query = {
+        $or: [{ name: { $regex: search, $options: "i" } }],
+        };
+    }
+
+    const totalItems = await ServiceCategory.countDocuments(query);
+
+    const pipeline: any[] = [
+        {
+        $lookup: {
+            from: "services",
+            localField: "_id",
+            foreignField: "serviceCategory",
+            as: "services",
+        },
+        },
+        { $sort: { number: 1 } },
+        { $skip: skip },
+        { $limit: limit },
+    ];
+
+    if (search) {
+        pipeline.unshift({ $match: query });
+    }
+
+    const services = await ServiceCategory.aggregate(pipeline);
+
+    const data = services.map((service: any) => ({
+        ...service,
+        services: service.services.map((sub: any) => ({
+        _id: sub._id,
+        name: sub.name,
+        number: sub.number,
+        url: sub.url
+            ? `${_CONFIG.CPS_PUBLIC_ASSET_DOMAIN}/v1.0/paperless${sub.url}`
+            : null,
+        })),
+    }));
 
     return {
         data,
         totalItems,
         pages: Math.ceil(totalItems / limit),
-        page: page,
-        limit: limit
-    }
-}
+        page,
+        limit,
+    };
+};
 
 const createCategoryServices = async (data: ICategory) => {
     const existingName = await ServiceCategory.findOne({ name: data.name})
