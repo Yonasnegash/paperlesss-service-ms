@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { ServiceCategory } from "../models/service_category.model";
-import { Service } from "../models/service.model";
+import Service from "../models/service.model";
 
 const RESET_DB = false
 

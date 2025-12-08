@@ -19,6 +19,7 @@ import { connectProducer } from "./lib/kafkaProducer";
 import { seedConfiguration } from "./lib/configuration.seeder";
 import { seedServicesCategory } from "./lib/serviceSeeder";
 import { seedBanks } from "./lib/bankSeeder";
+import { useLogger } from "./middleware/loggerMiddleware";
 
 // Load Environment Variables
 
@@ -60,8 +61,8 @@ app.use(function (req, res, next) {
   next();
 });
 app.use(express.json());
-app.use(successHandler)
-app.use(errorHandler)
+app.set('query parser', 'extended')
+
 app.use((req, res, next) => {
   res.setHeader(
     "Cache-Control",
@@ -72,12 +73,11 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(useLogger())
+
 // API Routes
 router(app);
 
-// Error Handling Middleware
-app.use(errorConverter)
-app.use(errHandler)
 // Start Server
 
 const initApp = async () => {

@@ -1,4 +1,4 @@
-import { Configuration } from "../models/configuration.model";
+import Configuration from "../models/configuration.model";
 
 const seedData = [
     {
