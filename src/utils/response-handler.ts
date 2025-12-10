@@ -22,6 +22,7 @@ export interface Pagination {
 export class ResponseHandler {
     static sendSuccess<T>(
         res: Response,
+        message: string | string[],
         data: T,
         pagination: Pagination | null = null,
         statusCode = HttpStatusCode.OK,
@@ -29,6 +30,7 @@ export class ResponseHandler {
         return res.status(statusCode).json({
             statusCode,
             error: null,
+            message: message,
             data,
             ...(pagination ? { pagination } : {})
         })
@@ -41,7 +43,7 @@ export class ResponseHandler {
     ) {
         return res.status(statusCode).json({
             statusCode,
-            error: message,
+            message: message,
             data: null
         })
     }

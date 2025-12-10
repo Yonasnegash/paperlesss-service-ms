@@ -1,6 +1,9 @@
-import mongoose, { Schema } from "mongoose";
+import { type PaginateModel } from "mongoose";
 import moment from "moment-timezone";
 import type { ICategory } from "../config/types/service_category";
+import modules from './imports/index'
+
+const Schema = modules.mongoose.Schema
 
 const ServiceCategorySchema = new Schema<ICategory>(
   {
@@ -11,6 +14,7 @@ const ServiceCategorySchema = new Schema<ICategory>(
   { timestamps: true }
 );
 
+ServiceCategorySchema.plugin(modules.paginator)
 
 ServiceCategorySchema.pre<ICategory>(
   "save",
@@ -29,7 +33,9 @@ ServiceCategorySchema.pre<ICategory>(
   }
 );
 
-export const ServiceCategory = mongoose.model<ICategory>(
+const ServiceCategory = modules.mongoose.model<ICategory>(
   "ServiceCategory",
   ServiceCategorySchema
 );
+
+export default ServiceCategory

@@ -235,7 +235,7 @@ export class MongooseBaseRepository<T extends Document> {
     const limit = options?.limit || 10
     const finalQuery: FilterQuery<T> = {
       ...query,
-      ...(options?.cursor ? { _id: { $gte: options.cursor } } : {}),
+      ...(options?.cursor && options.cursor !== "null" && options.cursor !== "undefined" && options.cursor !== "" ? { _id: { $gte: options.cursor } } : {}),
     }
 
     let results = (await this.model
@@ -257,7 +257,6 @@ export class MongooseBaseRepository<T extends Document> {
     }
 
     if (options?.configModel) {
-      console.log('options.configModel', options.configModel)
       const configs = await options.configModel.find({ isActive: true }).lean()
       const warningConfig = configs.find((c: any) => c.flagType === 'WARNING')
 
