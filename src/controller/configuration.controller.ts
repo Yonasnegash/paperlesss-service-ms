@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express"
-import { configurationDal } from "../dal/configuration.dal"
 import { validateOverlaps } from "../middleware/validate_config_payload_overlap"
 import { ConfigurationFilter, ConfigurationOptions, IConfiguration } from "../config/types/configuration"
 import { ResponseHandler } from "../utils/response-handler"

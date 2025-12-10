@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express"
 import mongoose, { PopulateOptions } from "mongoose"
-import { serviceDal } from "../dal/service.dal"
 import { ServiceFilter, ServiceOptions } from "../config/types/service"
 import { configurationRepositoryDal, serviceCategoryRepositoryDal, serviceRepositoryDal } from "../utils/DALimportModules"
 import { HttpStatusCode, Pagination, ResponseHandler } from "../utils/response-handler"

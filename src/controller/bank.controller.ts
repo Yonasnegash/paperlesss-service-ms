@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import bankDal from "../dal/bank.dal";
 import { BankFilter } from "../config/types/bank";
 import { ResponseHandler } from "../utils/response-handler";
 import { type PopulateOptions } from "mongoose";
