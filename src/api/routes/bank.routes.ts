@@ -1,7 +1,7 @@
 import { Router } from "express";
 import transferController from "../../controller/bank.controller";
 import validate_payload from "../../middleware/validationMiddleware";
-import { query_validation } from "../../validations/common.validation";
+import { query_validation } from "../../config/schema/common.validation";
 
 import { authMiddleware } from "../../middleware/authenticate";
 

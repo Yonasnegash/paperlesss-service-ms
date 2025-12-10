@@ -2,7 +2,7 @@ import { RequestHandler, Router } from "express";
 import { credentialController } from "../../controller/credential.controller";
 import validate_payload from "../../middleware/validationMiddleware";
 import { authMiddleware } from "../../middleware/authenticate";
-import { branch_schema } from "../../validations/branch.validation";
+import { branch_schema } from "../../config/schema/branch.validation";
 
 const router = Router()
 
