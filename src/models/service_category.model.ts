@@ -11,8 +11,14 @@ const ServiceCategorySchema = new Schema<ICategory>(
     number: { type: Number, required: true, unique: true },
     isActive: { type: Boolean, default: true }
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+ServiceCategorySchema.virtual("services", {
+  ref: "Service",
+  localField: "_id",
+  foreignField: "serviceCategory"
+})
 
 ServiceCategorySchema.plugin(modules.paginator)
 
