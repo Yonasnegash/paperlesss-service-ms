@@ -213,6 +213,28 @@ export class MongooseBaseRepository<T extends Document> {
     return { modifiedCount: result.modifiedCount }
   }
 
+  async updateConfigurationBulk(configurations: any[]): Promise<any[]> {
+    if (!Array.isArray(configurations) || configurations.length === 0) {
+      return []
+    }
+
+    const ops = configurations
+      .filter(c => c._id)
+      .map(config => ({
+        updateOne: {
+          filter: { _id: config._id },
+          update: { $set: { range: config.range }}
+        }
+      }))
+
+    if (ops.length === 0) return []
+
+    await this.model.bulkWrite(ops)
+
+    const ids = configurations.map(c => c._id)
+    return await this.model.find({ _id: { $in: ids }}).lean()
+  }
+
   async deleteOne(query: FilterQuery<T>): Promise<T | null> {
     return this.model.findOneAndDelete(query)
   }

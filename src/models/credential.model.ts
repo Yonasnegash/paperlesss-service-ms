@@ -1,9 +1,12 @@
-import mongoose, { Schema } from "mongoose";
+import { type PaginateModel} from "mongoose";
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import moment from "moment-timezone";
 import type { ICredential } from "../config/types/credeintial";
 import { encryptText } from "../utils/encryption";
+import modules from './imports/index'
+
+const Schema = modules.mongoose.Schema
 
 const CredentialSchema = new Schema<ICredential>(
   {
@@ -17,6 +20,7 @@ const CredentialSchema = new Schema<ICredential>(
   { timestamps: true }
 );
 
+CredentialSchema.plugin(modules.paginator)
 
 CredentialSchema.pre<ICredential>(
   "save",
@@ -61,7 +65,9 @@ CredentialSchema.methods.isPasswordMatch = async function (
     return bcrypt.compare(password, this.password)
 }
 
-export const Credential = mongoose.model<ICredential>(
+const Credential = modules.mongoose.model<ICredential>(
   "Credential",
   CredentialSchema
 );
+
+export default Credential
