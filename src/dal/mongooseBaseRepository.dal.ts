@@ -119,7 +119,7 @@ export class MongooseBaseRepository<T extends Document> {
 
     const finalQuery: FilterQuery<T> = {
       ...query,
-      ...(options?.cursor ? { _id: { $gte: options.cursor } } : {}),
+      ...(options?.cursor && options.cursor !== "null" && options.cursor !== "undefined" && options.cursor !== "" ? { _id: { $gte: options.cursor } } : {}),
     };
 
     let results = (await this.model

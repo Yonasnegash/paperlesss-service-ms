@@ -194,13 +194,12 @@ const toggleCategoryServiceStatus = async (req: Request, res: Response, next: Ne
 }
 
 const getServices = async (req: Request, res: Response, next: NextFunction) => {
-    const { page, limit, cursor } = req.query
+    const { limit, cursor } = req.query
 
     try {
         const query: ServiceFilter = buildFilter(req.query)
 
         const options: ServiceOptions = {
-            page: Number(page) || 1,
             limit: Number(limit) || 10,
             sort: { _id: 1 },
             cursor: cursor as string || undefined,

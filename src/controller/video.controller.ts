@@ -22,7 +22,7 @@ const buildFilter = (params: Record<string, any>): VideoFilter => {
 const getVideos = async (req: Request, res: Response) => {
     try {
         const { cursor, limit } = req.query
-        const query: VideoFilter = req.query
+        const query: VideoFilter = buildFilter(req.query)
 
         const options: VideoOptions = {
             limit: Number(limit) || 10,
