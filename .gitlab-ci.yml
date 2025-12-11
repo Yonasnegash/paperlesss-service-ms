@@ -26,7 +26,7 @@ prepare-job:
     - git fetch --all
     - git reset --hard origin/$DEPLOY_BRANCH
     - echo $(which node)
-    - npm ci
+    - npm i
   rules:
     - if: '$CI_COMMIT_BRANCH == $DEPLOY_BRANCH'
 
