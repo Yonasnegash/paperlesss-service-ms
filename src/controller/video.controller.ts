@@ -3,7 +3,7 @@ import { IVideo, VideoFilter, VideoOptions } from "../config/types/video"
 import { HttpStatusCode, ResponseHandler } from "../utils/response-handler"
 import { videoRepositoryDal } from "../utils/DALimportModules"
 import mongoose from "mongoose"
-import { storeFileToMinio } from "../utils/multerMinio"
+import { deleteFileFromMinio, storeFileToMinio } from "../utils/multerMinio"
 
 const buildFilter = (params: Record<string, any>): VideoFilter => {
     let filter: VideoFilter = {}
@@ -118,7 +118,91 @@ const createVideo = async (req: Request, res: Response) => {
     }
 }
 
-const updateVideo = async (req: Request, res: Response) => {}
+const updateVideo = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const payload = req.body
+    const videoObjectId = new mongoose.Types.ObjectId(id)
+
+    try {
+        const video = await videoRepositoryDal.findOne({ _id: videoObjectId })
+
+        if (!video) {
+            return ResponseHandler.notFound(res, "Video not found")
+        }
+
+        const files = req.files as {
+            [fieldname: string]: Express.Multer.File[]
+        }
+
+        const bucket = global._CONFIG.MINIO_BUCKET_NAME
+
+        const extractObjectName = (url: string) => {
+            if (!url) return null
+            
+            try {
+                const parts = url.split(bucket + "/")
+                return parts[1] ?? null
+            } catch (error) {
+                return null
+            }
+        }
+
+        let updatedThumbnail = video.thumbnailUrl
+        let updatedVideoUrl = video.videoUrl
+
+        const thumbnailFile = files?.thumbnail?.[0]
+        if (thumbnailFile) {
+            const newObjectName = `thumbnails/${Date.now()}-${thumbnailFile.originalname}`
+
+            updatedThumbnail = await storeFileToMinio(
+                newObjectName,
+                thumbnailFile.buffer,
+                thumbnailFile.mimetype,
+                bucket
+            )
+
+            const oldObject = extractObjectName(video.thumbnailUrl)
+            if (oldObject) {
+                deleteFileFromMinio(oldObject, bucket).catch((e) => console.error("Failed to delete old thumnail:", e))
+            }
+        }
+
+        const videoFile = files?.video?.[0]
+        if (videoFile) {
+            const newObjectName = `videos/${Date.now()}-${videoFile.originalname}`
+
+            updatedVideoUrl = await storeFileToMinio(
+                newObjectName,
+                videoFile.buffer,
+                videoFile.mimetype,
+                bucket
+            )
+
+            const oldObject = extractObjectName(video.videoUrl)
+            if (oldObject) {
+                deleteFileFromMinio(oldObject, bucket).catch((e) => console.error("Failed to delete old video:", e))
+            }
+        }
+
+        const updateData = {
+            title: payload.title ?? video.title,
+            subText: payload.subText ?? video.subText,
+            type: payload.type ?? video.type,
+            thumbnailUrl: updatedThumbnail,
+            videoUrl: updatedVideoUrl
+        }
+
+        await videoRepositoryDal.updateOne(
+            { _id: videoObjectId },
+            updateData,
+            { new: true }
+        )
+
+        return ResponseHandler.sendSuccess(res, "Video updated successfully", null)
+    } catch (error) {
+        return ResponseHandler.serverError(res, (error as Error)?.message || "Internal server error")
+    }
+}
 
 const changeVideoStatus = async (req: Request, res: Response) => {
     try {
