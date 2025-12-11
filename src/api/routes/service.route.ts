@@ -2,8 +2,8 @@ import { RequestHandler, Router } from "express";
 import { serviceController } from "../../controller/service.controller";
 import validate_payload from "../../middleware/validationMiddleware";
 import { authMiddleware } from "../../middleware/authenticate";
-import { service_category_schema } from "../../validations/service_category.validation";
-import { service_schema } from "../../validations/service.validation";
+import { service_category_schema } from "../../config/schema/service_category.validation";
+import { service_schema } from "../../config/schema/service.validation";
 
 const router = Router()
 

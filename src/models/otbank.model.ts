@@ -1,8 +1,9 @@
-import mongoose, { PaginateModel } from "mongoose";
+import { type PaginateModel } from "mongoose";
 import paginator from "mongoose-paginate-v2";
 import { Bank } from "../config/types/bank";
+import modules from './imports/index'
 
-const Schema = mongoose.Schema;
+const Schema = modules.mongoose.Schema;
 
 const OtbankSchema = new Schema(
   {
@@ -22,7 +23,7 @@ const OtbankSchema = new Schema(
 // add mongoose-troop middleware to support pagination
 OtbankSchema.plugin(paginator);
 
-const OtbankModel = mongoose.model<Bank, PaginateModel<Bank>>(
+const OtbankModel = modules.mongoose.model<Bank, PaginateModel<Bank>>(
   "Otbank",
   OtbankSchema
 );

@@ -1,6 +1,9 @@
-import mongoose, { Schema } from "mongoose";
+import { type PaginateModel } from "mongoose";
 import moment from "moment-timezone";
-import type { IService } from "../config/types/service";
+import { IService } from "../config/types/service";
+import modules from './imports/index'
+
+const Schema = modules.mongoose.Schema;
 
 const ServiceSchema = new Schema<IService>(
   {
@@ -16,6 +19,7 @@ const ServiceSchema = new Schema<IService>(
   { timestamps: true }
 );
 
+ServiceSchema.plugin(modules.paginator)
 
 ServiceSchema.pre<IService>(
   "save",
@@ -34,7 +38,9 @@ ServiceSchema.pre<IService>(
   }
 );
 
-export const Service = mongoose.model<IService>(
+const Service = modules.mongoose.model<IService, PaginateModel<IService>>(
   "Service",
   ServiceSchema
 );
+
+export default Service

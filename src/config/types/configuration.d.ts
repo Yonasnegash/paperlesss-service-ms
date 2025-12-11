@@ -1,6 +1,13 @@
-import { Document } from "mongodb";
+import {
+        type Document,
+        type UpdateQuery,
+        type FilterQuery,
+        type Types,
+        type ProjectionType,
+        type QueryOptions,
+    } from "mongoose";
 
-export interface IConfiguration extends Document {
+interface IConfiguration extends Document {
     flagType: string
     range: {
         start: number
@@ -8,3 +15,10 @@ export interface IConfiguration extends Document {
     }
     isActive: boolean
 }
+
+export type IConfiguration = IConfiguration & Document
+
+export interface ConfigurationFilter extends FilterQuery<IConfiguration> { }
+export interface ConfigurationProject extends ProjectionType<IConfiguration> { }
+export interface ConfigurationOptions extends QueryOptions<IConfiguration> { }
+export interface ServiceUpdate extends UpdateQuery<IConfiguration> { }

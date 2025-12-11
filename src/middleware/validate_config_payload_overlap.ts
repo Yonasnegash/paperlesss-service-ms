@@ -1,12 +1,20 @@
-import { Configuration } from "../models/configuration.model"
+import Configuration from "../models/configuration.model"
 import { ApiError } from "../utils/ApiError"
 import { IConfiguration } from "../config/types/configuration"
+import { configurationRepositoryDal } from "../utils/DALimportModules"
+import { ResponseHandler } from "../utils/response-handler"
 
 export const validateOverlaps = async (configurations: IConfiguration[]) => {
-    const existingConfig = await Configuration.find({}).lean()
+    const existingConfig = await configurationRepositoryDal.find(
+        {},
+        undefined,
+        undefined,
+        undefined,
+        true
+    )
 
     const finalConfigs = existingConfig.map(cfg => {
-        const updated = configurations.find(c => c._id.toString() === cfg._id.toString())
+        const updated = configurations.find(c => c._id?.toString() === cfg._id.toString())
         return updated ? { ...cfg, range: updated.range } : cfg
     })
 

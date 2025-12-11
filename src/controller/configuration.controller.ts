@@ -1,35 +1,81 @@
 import { NextFunction, Request, Response } from "express"
-import { configurationDal } from "../dal/configuration.dal"
 import { validateOverlaps } from "../middleware/validate_config_payload_overlap"
+import { ConfigurationFilter, ConfigurationOptions, IConfiguration } from "../config/types/configuration"
+import { ResponseHandler } from "../utils/response-handler"
+import { configurationRepositoryDal } from "../utils/DALimportModules"
+import mongoose from "mongoose"
 
-const getConfigurations = async (req: Request, res: Response, next: NextFunction) => {
+const buildFilter = (params: Record<string, any>): ConfigurationFilter => {
+    let filter: ConfigurationFilter = {}
+
+    if (params.search) {
+        filter = {
+            $or: [
+                { flagType: { $regex: params.search, $options: 'i' } },
+            ]
+        }
+    }
+
+    return filter
+}
+
+const getConfigurations = async (req: Request, res: Response) => {
     try {
-        const configurations = await configurationDal.fetchConfigurations()
-        return res.status(200).json({ message: 'Success', data: configurations, status: 200 })
+        const query: ConfigurationFilter = buildFilter(req.query)
+
+        const options: ConfigurationOptions = {
+            select: '-__v'
+        }
+
+        const configurations = await configurationRepositoryDal.find(
+            query,
+            options.select
+        )
+
+        return ResponseHandler.sendSuccess(res, 'Success', configurations)
     } catch (error) {
-        next(error)
+        return ResponseHandler.serverError(res, (error as Error)?.message || 'Internal server error')
     }
 }
 
-const updateConfiguration = async (req: Request, res: Response, next: NextFunction) => {
+const updateConfiguration = async (req: Request, res: Response) => {
     try {
-        const { configurations } = req.body
+        const configurations: IConfiguration[] = req.body?.configurations
+
+        if (!Array.isArray(configurations) || configurations.length === 0) {
+            return ResponseHandler.badRequest(res, "Configurations array is required.")
+        }
 
         await validateOverlaps(configurations)
         
-        await configurationDal.updateConfiguration(configurations)
-        return res.status(200).json({ message: 'Success', status: 200 })
+        await configurationRepositoryDal.updateConfigurationBulk(configurations)
+        return ResponseHandler.sendSuccess(res, "Success", null)
     } catch (error) {
-        next(error)
+        return ResponseHandler.serverError(res, (error as Error)?.message || "Internal server error")
     }
 }
 
 const changeConfigurationStatus = async (req: Request, res: Response, next: NextFunction) => {
     try {
-       await configurationDal.changeConfigurationStatus(req.params.id)
-       return res.status(200).json({ message: 'Success', status: 200 })
+        const { id } = req.params
+        const configObjectId = new mongoose.Types.ObjectId(id)
+
+        const configuration = await configurationRepositoryDal.findOne({ _id: configObjectId })
+
+        if (!configuration) {
+            ResponseHandler.notFound(res, "No configuration found")
+        }
+
+        const newStatus = !configuration?.isActive
+
+        await configurationRepositoryDal.updateOne(
+            { _id: configObjectId },
+            { isActive: newStatus }
+        )
+
+        return ResponseHandler.sendSuccess(res, "Configuration status changed", null)
     } catch (error) {
-        next(error)
+        return ResponseHandler.serverError(res, (error as Error)?.message || "Internal server error")
     }
 }
 

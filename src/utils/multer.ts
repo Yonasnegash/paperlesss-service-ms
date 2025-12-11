@@ -3,21 +3,21 @@ import { Request } from "express";
 import httpStatus from "http-status";
 import { ApiError } from "../utils/ApiError.ts";
 
+// Allowed MIME types
+const allowedImageTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const allowedVideoTypes = ["video/mp4", "video/mpeg", "video/webm", "video/ogg", "video/quicktime"];
+
 // Filter images mime type
 const filterFile = (
   req: Request,
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ) => {
-  if (
-    file.mimetype === "image/jpeg" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/webp"
-  ) {
+  if (allowedImageTypes.includes(file.mimetype) || allowedVideoTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new ApiError(httpStatus.BAD_REQUEST, "Only JPG, JPEG, PNG and WebP images are allowed"));
+    console.log('file type', file.mimetype)
+    cb(new ApiError(httpStatus.BAD_REQUEST, "Only JPG, JPEG, PNG, WebP images and MP4/WebM videos are allowed"));
   }
 };
 

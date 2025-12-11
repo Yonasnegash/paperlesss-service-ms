@@ -1,6 +1,9 @@
-import mongoose, { Schema } from "mongoose";
+import { type PaginateModel } from "mongoose";
 import moment from "moment-timezone";
 import type { IConfiguration } from "../config/types/configuration";
+import modules from './imports/index'
+
+const Schema = modules.mongoose.Schema
 
 const ConfigurationSchema = new Schema<IConfiguration>(
   {
@@ -14,6 +17,7 @@ const ConfigurationSchema = new Schema<IConfiguration>(
   { timestamps: true }
 );
 
+ConfigurationSchema.plugin(modules.paginator)
 
 ConfigurationSchema.pre<IConfiguration>(
   "save",
@@ -32,7 +36,9 @@ ConfigurationSchema.pre<IConfiguration>(
   }
 );
 
-export const Configuration = mongoose.model<IConfiguration>(
+const Configuration = modules.mongoose.model<IConfiguration>(
   "Configuration",
   ConfigurationSchema
 );
+
+export default Configuration

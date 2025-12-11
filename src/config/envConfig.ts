@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { envValidation } from '../validations/env.validation';
+import { envValidation } from './schema/env.validation';
 
 dotenv.config();
 
