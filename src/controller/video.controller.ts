@@ -120,7 +120,29 @@ const createVideo = async (req: Request, res: Response) => {
 
 const updateVideo = async (req: Request, res: Response) => {}
 
-const changeVideoStatus = async (req: Request, res: Response) => {}
+const changeVideoStatus = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params
+        const videoObjectId = new mongoose.Types.ObjectId(id)
+
+        const video = await videoRepositoryDal.findOne({ _id: videoObjectId })
+
+        if (!video) {
+            return ResponseHandler.notFound(res, "Video not found")
+        }
+
+        const newStatus = !video.isActive
+
+        await videoRepositoryDal.updateOne(
+            { _id: videoObjectId },
+            { isActive: newStatus }
+        )
+
+        return ResponseHandler.sendSuccess(res, 'Video status changed', null)
+    } catch (error) {
+        return ResponseHandler.serverError(res, (error as Error).message || "Internal server error")
+    }
+}
 
 export const videoController = {
     getVideos,
