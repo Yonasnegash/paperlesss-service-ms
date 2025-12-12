@@ -1,0 +1,71 @@
+# Common variables and reusable jobs
+variables:
+  DOCKER_REGISTRY: harbor.dashensupperapp.com/superapp
+  SERVICE_NAME: paperless-services
+  ARGO_REPO: https://${GIT_USERNAME}:${GIT_PASSWORD}@gitlab.com/bamlak4774/superapp-argocd.git
+  SONAR_HOST_URL: https://sonarqube.eaglelionsystems.com
+  SONAR_TOKEN: ${SONAR_TOKEN}
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+  SONAR_PROJECT_KEY: superapp-paperless-services-ms
+
+.build-image-template: &build-image-template
+  stage: build
+  image: 
+    name: local-docker:25
+    pull_policy: never
+  variables:
+    DOCKER_HOST: unix:///var/run/docker.sock
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - echo "Logging into registry:$DOCKER_REGISTRY"
+    - echo "$DOCKER_PASSWORD" | docker login $DOCKER_REGISTRY -u "$DOCKER_USERNAME" --password-stdin
+  script:
+    - export IMAGE_TAG="${IMAGE_TAG}"
+    - echo "IMAGE_TAG=$IMAGE_TAG"
+    - echo "Building $DOCKER_REGISTRY/$SERVICE_NAME:$IMAGE_TAG"
+    - docker build -t $DOCKER_REGISTRY/$SERVICE_NAME:$IMAGE_TAG .
+    - docker push $DOCKER_REGISTRY/$SERVICE_NAME:$IMAGE_TAG
+    - echo "IMAGE_TAG=$IMAGE_TAG" > image.env
+
+
+
+.update-kustomize-template: &update-kustomize-template
+  stage: deploy
+  image: 
+    name: local-alpine:3.14
+    pull_policy: never
+  before_script:
+    - apk add --no-cache git openssh-client yq
+  script:
+    - echo "Deploying service:$SERVICE_NAME with fixed image tag:$IMAGE_TAG"
+    - git clone $ARGO_REPO argo-repo
+    - cd argo-repo
+    - echo "Checkout to main branch"
+    - git checkout main
+    - OVERLAY_PATH=services/$SERVICE_NAME/overlays/$CI_ENVIRONMENT_NAME
+    - cd $OVERLAY_PATH
+    - echo "Updating image tag to $IMAGE_TAG"
+    - yq eval -i ".images[0].newTag = \"$IMAGE_TAG\"" kustomization.yml
+    - git config user.email "ci@gitlab.com"
+    - git config user.name "GitLab CI"
+    - git add .
+    - git commit -am "$CI_COMMIT_TITLE [$CI_ENVIRONMENT_NAME] $IMAGE_TAG"
+    - git push origin main
+
+
+# .sonar-scan-template: &sonar-scan-template
+#   stage: sonar
+#   image: sonarsource/sonar-scanner-cli:11
+#   variables:
+#     GIT_DEPTH: "0"  # So SonarQube can see full history
+#   script:
+#     - echo "Starting SonarQube scan for $SERVICE_NAME..."
+#     - |
+#       sonar-scanner \
+#         -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+#         -Dsonar.sources=. \
+#         -Dsonar.host.url=$SONAR_HOST_URL \
+#         -Dsonar.login=$SONAR_TOKEN \
+#         -Dsonar.qualitygate.wait=true \
+#         -Dsonar.exclusions=**/*.java
+#   allow_failure: false

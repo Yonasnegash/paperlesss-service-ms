@@ -1,0 +1,35 @@
+stages:
+  # - sonar
+  - build
+  - deploy
+
+# sonarqube-check-dev:
+#   extends: .sonar-scan-template
+#   tags: 
+#     - dev_enhanced # Use 'dev' or 'qa' for the respective environments
+#   rules:
+#     - if: "$CI_COMMIT_BRANCH == 'dev-enhance'"
+
+build-image-dev:
+  extends: .build-image-template
+  variables:
+    SERVICE_NAME: paperless-services
+    CI_ENVIRONMENT_NAME: dev
+    IMAGE_TAG: "${CI_ENVIRONMENT_NAME}-${CI_COMMIT_SHORT_SHA}"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev-enhance"'
+  tags:
+    # - dev_enhanced
+    - dashen_dev
+
+update-kustomize-dev:
+  extends: .update-kustomize-template
+  variables:
+    SERVICE_NAME: paperless-services
+    CI_ENVIRONMENT_NAME: dev
+    IMAGE_TAG: "${CI_ENVIRONMENT_NAME}-${CI_COMMIT_SHORT_SHA}"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev-enhance"'
+  tags:
+    # - dev_enhanced
+    - dashen_dev
