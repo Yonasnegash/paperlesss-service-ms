@@ -1,0 +1,29 @@
+stages:
+  # - sonar
+  - build
+  - deploy
+
+build-image-qa:
+  extends: .build-image-template
+  variables:
+    SERVICE_NAME: paperless-services
+    CI_ENVIRONMENT_NAME: qa
+    IMAGE_TAG: "${CI_ENVIRONMENT_NAME}-${CI_COMMIT_SHORT_SHA}"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "qa"'
+  tags:
+    # - elst_dev
+    - dashen_dev
+
+update-kustomize-qa:
+  extends: .update-kustomize-template
+  variables:
+    SERVICE_NAME: paperless-services
+    CI_ENVIRONMENT_NAME: qa
+    IMAGE_TAG: "${CI_ENVIRONMENT_NAME}-${CI_COMMIT_SHORT_SHA}"
+    ARGO_BRANCH: superapp-qa
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "qa"'
+  tags:
+    # - elst_dev
+    - dashen_dev
