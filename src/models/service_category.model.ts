@@ -39,7 +39,7 @@ ServiceCategorySchema.pre<ICategory>(
   }
 );
 
-const ServiceCategory = modules.mongoose.model<ICategory>(
+const ServiceCategory = modules.mongoose.model<ICategory, PaginateModel<ICategory>>(
   "ServiceCategory",
   ServiceCategorySchema
 );

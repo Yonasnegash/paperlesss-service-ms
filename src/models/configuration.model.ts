@@ -36,7 +36,7 @@ ConfigurationSchema.pre<IConfiguration>(
   }
 );
 
-const Configuration = modules.mongoose.model<IConfiguration>(
+const Configuration = modules.mongoose.model<IConfiguration, PaginateModel<IConfiguration>>(
   "Configuration",
   ConfigurationSchema
 );

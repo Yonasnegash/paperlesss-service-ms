@@ -65,7 +65,7 @@ CredentialSchema.methods.isPasswordMatch = async function (
     return bcrypt.compare(password, this.password)
 }
 
-const Credential = modules.mongoose.model<ICredential>(
+const Credential = modules.mongoose.model<ICredential, PaginateModel<ICredential>>(
   "Credential",
   CredentialSchema
 );
