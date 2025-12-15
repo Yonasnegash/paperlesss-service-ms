@@ -10,7 +10,7 @@ const connect = async () => {
 
   try {
     mongoose
-      .connect(_CONFIG.MONGODB_URL, {} as mongoose.ConnectOptions)
+      .connect(_CONFIG.MONGODB_PAPERLESS_URL, {} as mongoose.ConnectOptions)
       .then(() => {
         console.log(chalk.blueBright.italic("Connection Made"));
       })
@@ -37,6 +37,26 @@ const disconnect = () => {
   }
 
   void mongoose.disconnect();
+};
+
+let superAppConnection: mongoose.Connection | null = null;
+
+export const getSuperAppConnection = async () => {
+  const _CONFIG = await initConfig();
+
+  if (!superAppConnection) {
+    superAppConnection = mongoose.createConnection(_CONFIG.SUPERAPP_MONGODB_URL);
+
+    superAppConnection.on("connected", () => {
+      console.log("SuperApp DB Connected");
+    });
+
+    superAppConnection.on("error", (err) => {
+      console.error("SuperApp DB error:", err);
+    });
+  }
+
+  return superAppConnection;
 };
 
 export default {
