@@ -35,6 +35,155 @@ export const getGeneralStats = async (
 };
 
 /**
+ * Get transactions over time
+ */
+export const getTransactionsOverTime = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const query: IStatsQuery = {
+            timeRange: req.query.timeRange as any,
+            startDate: req.query.startDate as string,
+            endDate: req.query.endDate as string,
+            district: req.query.district as string,
+            branchId: req.query.branchId as string
+        };
+    
+        const transactions = await statisticsQueryService.getTransactionsOverTime(query)
+        
+        return ResponseHandler.sendSuccess(
+            res,
+            "Transactions overtime statistics retrieved successfully",
+            transactions
+        )
+    } catch (error) {
+        next(error)
+    }
+}
+
+/**
+ * Get most used services stat
+ */
+
+export const getMostUsedServices = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const query: IStatsQuery = {
+            timeRange: req.query.timeRange as any,
+            startDate: req.query.startDate as string,
+            endDate: req.query.endDate as string,
+            district: req.query.district as string,
+            branchId: req.query.branchId as string
+        };
+
+        const services = await statisticsQueryService.getMostUsedServices(query)
+
+        return ResponseHandler.sendSuccess(
+            res,
+            "Most used services retrieved successfully",
+            services
+        )
+    } catch (error) {
+        next(error)
+    }
+}
+
+/**
+ * Get best performing branch
+ */
+
+export const getBestPerformingBranch = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const query: IStatsQuery = {
+            timeRange: req.query.timeRange as any,
+            startDate: req.query.startDate as string,
+            endDate: req.query.endDate as string,
+            district: req.query.district as string,
+            branchId: req.query.branchId as string
+        };
+
+        const bestPerformingBranch = await statisticsQueryService.getBestPerformingBranch(query)
+
+        return ResponseHandler.sendSuccess(
+            res,
+            "Best performing branch retrieved successfully",
+            bestPerformingBranch
+        )
+    } catch (error) {
+        next(error)
+    }
+}
+
+/**
+ * Get customer engagement score
+ */
+
+export const getCustomerEngagementScore = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const query: IStatsQuery = {
+            timeRange: req.query.timeRange as any,
+            startDate: req.query.startDate as string,
+            endDate: req.query.endDate as string,
+            district: req.query.district as string,
+            branchId: req.query.branchId as string
+        };
+
+        const customerEngagementScore = await statisticsQueryService.getCustomerEngagementScore(query)
+
+        return ResponseHandler.sendSuccess(
+            res,
+            "Customer engagement score retrieved successfully",
+            customerEngagementScore
+        )
+    } catch (error) {
+        next(error)
+    }
+}
+
+/**
+ * Get best performing branches list
+ */
+
+export const getBestPerformingBranches = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const query: IStatsQuery = {
+            timeRange: req.query.timeRange as any,
+            startDate: req.query.startDate as string,
+            endDate: req.query.endDate as string,
+            district: req.query.district as string,
+            branchId: req.query.branchId as string
+        };
+
+        const bestPerformingBranches = await statisticsQueryService.getBestPerformingBranches(query)
+
+        return ResponseHandler.sendSuccess(
+            res,
+            "Best performing branches retrieved successfully",
+            bestPerformingBranches
+        )
+    } catch (error) {
+        next(error)
+    }
+}
+
+/**
  * Get branch insights
  */
 export const getBranchInsights = async (

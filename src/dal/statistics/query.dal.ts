@@ -8,7 +8,12 @@ import {
   IGeneralStatsResponse,
   IBranchInsightsResponse,
   IBranchDetailResponse,
-  ICustomerStatsResponse
+  ICustomerStatsResponse,
+  ITransactionsStatResponse,
+  IMostUsedServicesResponse,
+  IBestPerformingBranch,
+  ICustomerEngagementScore,
+  IBestPerformingBranches
 } from "../../config/types/statistics";
 
 export class StatisticsQueryService {
@@ -85,10 +90,35 @@ export class StatisticsQueryService {
     
     // Get total services count
     const totalServices = await Service.countDocuments({ isActive: true });
+
+    const bestBranch = await this.bestPerformingBranch(filter);
     
-    // Get best performing branch
-    const bestBranch = await this.getBestPerformingBranch(filter);
+    return {
+      totalPaperlessActivatedBranches,
+      totalCustomers,
+      totalServices,
+      bestPerformingBranch: bestBranch
+    };
+  }
+
+  /**
+   * Get transaction overtime stats
+   */
+  async getTransactionsOverTime(query: IStatsQuery): Promise<ITransactionsStatResponse> {
+    const { startDate, endDate } = this.getDateRange(
+        query.timeRange || '1month',
+        query.startDate,
+        query.endDate
+    );
     
+    // Build filter
+    const filter: any = {
+        date: { $gte: startDate, $lte: endDate }
+    };
+    
+    if (query.district) filter.district = query.district;
+    if (query.branchId) filter.branchId = query.branchId;
+
     // Get transactions over time
     const transactionsOverTime = await DailyStats.aggregate([
       { $match: filter },
@@ -107,59 +137,117 @@ export class StatisticsQueryService {
         }
       }
     ]);
+
+    return {
+        totalTransactionsOverTime: transactionsOverTime
+    }
+  }
+
+  /**
+   * Get most used services stats
+   */
+  async getMostUsedServices(query: IStatsQuery): Promise<IMostUsedServicesResponse> {
+    const { startDate, endDate } = this.getDateRange(
+      query.timeRange || '1month',
+      query.startDate,
+      query.endDate
+    );
     
+    // Build filter
+    const filter: any = {
+      date: { $gte: startDate, $lte: endDate }
+    };
+    
+    if (query.district) filter.district = query.district;
+    if (query.branchId) filter.branchId = query.branchId;
+
     // Get most used services
     const serviceAgg = await DailyStats.aggregate([
-      { $match: filter },
-      { $unwind: '$serviceBreakdown' },
-      {
-        $group: {
-          _id: '$serviceBreakdown.serviceId',
-          serviceName: { $first: '$serviceBreakdown.serviceName' },
-          totalCount: { $sum: '$serviceBreakdown.count' }
-        }
-      },
-      { $sort: { totalCount: -1 } },
-      { $limit: 10 }
+        { $match: filter },
+        { $unwind: '$serviceBreakdown' },
+        {
+            $group: {
+            _id: '$serviceBreakdown.serviceId',
+            serviceName: { $first: '$serviceBreakdown.serviceName' },
+            totalCount: { $sum: '$serviceBreakdown.count' }
+            }
+        },
+        { $sort: { totalCount: -1 } },
+        { $limit: 10 }
     ]);
     
     const totalServiceCount = serviceAgg.reduce((sum, s) => sum + s.totalCount, 0);
     const mostUsedServices = serviceAgg.map(s => ({
-      serviceId: s._id.toString(),
-      serviceName: s.serviceName,
-      count: s.totalCount,
-      percentage: Math.round((s.totalCount / totalServiceCount) * 100)
+        serviceId: s._id.toString(),
+        serviceName: s.serviceName,
+        count: s.totalCount,
+        percentage: Math.round((s.totalCount / totalServiceCount) * 100)
     }));
-    
-    // Calculate customer engagement score
-    const engagementScores = await CustomerEngagement.find(
-      query.branchId ? { branchId: query.branchId } : {}
-    );
-    const avgEngagementScore = engagementScores.length
-      ? Math.round(
-          engagementScores.reduce((sum, e) => sum + e.engagementScore, 0) / engagementScores.length
-        )
-      : 0;
-    
-    // Get best performing branches list
-    const bestBranches = await this.getBestPerformingBranches(filter, 10);
-    
+
     return {
-      totalPaperlessActivatedBranches,
-      totalCustomers,
-      totalServices,
-      bestPerformingBranch: bestBranch,
-      totalTransactionsOverTime: transactionsOverTime,
-      mostUsedServices,
-      customerEngagementScore: avgEngagementScore,
-      bestPerformingBranches: bestBranches
-    };
+        mostUsedServices
+    }
   }
-  
+
   /**
    * Get best performing branch
    */
-  private async getBestPerformingBranch(filter: any) {
+  async getBestPerformingBranch(query: IStatsQuery): Promise<IBestPerformingBranch> {
+    const { startDate, endDate } = this.getDateRange(
+        query.timeRange || '1month',
+        query.startDate,
+        query.endDate
+    );
+    
+    // Build filter
+    const filter: any = {
+        date: { $gte: startDate, $lte: endDate }
+    };
+    
+    if (query.district) filter.district = query.district;
+    if (query.branchId) filter.branchId = query.branchId;
+
+    const branchStats = await DailyStats.aggregate([
+        { $match: filter },
+        {
+            $group: {
+            _id: '$branchId',
+            totalQueueNumbers: { $sum: '$totalQueueNumbers' },
+            uniqueCustomers: { $addToSet: { $arrayElemAt: ['$uniqueCustomers', 0] } }
+            }
+        },
+        { $sort: { totalQueueNumbers: -1 } },
+        { $limit: 1 }
+    ]);
+    
+    if (!branchStats.length) {
+      return {
+        bestPerformingBranch: {
+            branchId: '',
+            branchName: '',
+            totalQueueNumbers: 0,
+            totalCustomers: 0
+        }
+      };
+    }
+    
+    const branch = branchStats[0];
+    const branchInfo = await Credential.findOne({ branchCode: branch._id });
+    
+    return {
+        bestPerformingBranch: {
+            branchId: branch._id,
+            branchName: branchInfo?.branchName || branch._id,
+            totalQueueNumbers: branch.totalQueueNumbers,
+            totalCustomers: branch.uniqueCustomers.filter((c: any) => c).length
+        }
+    };
+  }
+
+  /**
+   * Get best performing branch
+   */
+  private async bestPerformingBranch(filter: any) {
     const branchStats = await DailyStats.aggregate([
       { $match: filter },
       {
@@ -192,11 +280,45 @@ export class StatisticsQueryService {
       totalCustomers: branch.uniqueCustomers.filter((c: any) => c).length
     };
   }
+
+  /**
+   * Get customer engagement score
+   */
+  async getCustomerEngagementScore(query: IStatsQuery): Promise<ICustomerEngagementScore> {
+    // Calculate customer engagement score
+    const engagementScores = await CustomerEngagement.find(
+      query.branchId ? { branchId: query.branchId } : {}
+    );
+
+    const avgEngagementScore = engagementScores.length
+      ? Math.round(
+          engagementScores.reduce((sum, e) => sum + e.engagementScore, 0) / engagementScores.length
+        )
+      : 0;
+
+    return {
+        customerEngagementScore: avgEngagementScore
+    }
+  }
   
   /**
    * Get best performing branches list
    */
-  private async getBestPerformingBranches(filter: any, limit: number = 10) {
+  async getBestPerformingBranches(query: any, limit: number = 10): Promise<IBestPerformingBranches> {
+    const { startDate, endDate } = this.getDateRange(
+      query.timeRange || '1month',
+      query.startDate,
+      query.endDate
+    );
+    
+    // Build filter
+    const filter: any = {
+      date: { $gte: startDate, $lte: endDate }
+    };
+    
+    if (query.district) filter.district = query.district;
+    if (query.branchId) filter.branchId = query.branchId;
+
     const branchStats = await DailyStats.aggregate([
       { $match: filter },
       {
@@ -224,7 +346,9 @@ export class StatisticsQueryService {
       });
     }
     
-    return result;
+    return {
+        bestPerformingBranches: result
+    };
   }
   
   /**

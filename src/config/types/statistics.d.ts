@@ -15,7 +15,7 @@ export interface IDailyStats extends Document {
   qrInitiatedQueues: number;
   
   // Customer metrics
-  uniqueCustomers: string[]; // Array of phone numbers
+  uniqueCustomers: string[]; // Array of account numbers
   uniqueCustomerCount: number;
   
   // Service breakdown
@@ -152,17 +152,37 @@ export interface IGeneralStatsResponse {
     totalQueueNumbers: number;
     totalCustomers: number;
   };
+}
+export interface ITransactionsStatResponse {
   totalTransactionsOverTime: {
     date: string;
     count: number;
   }[];
+}
+
+export interface IMostUsedServicesResponse {
   mostUsedServices: {
-    serviceId: string;
-    serviceName: string;
-    count: number;
-    percentage: number;
+      serviceId: string;
+      serviceName: string;
+      count: number;
+      percentage: number;
   }[];
-  customerEngagementScore: number;
+}
+
+export interface IBestPerformingBranch {
+  bestPerformingBranch: {
+      branchId: string;
+      branchName: string;
+      totalQueueNumbers: number;
+      totalCustomers: number;
+  };
+}
+
+export interface ICustomerEngagementScore {
+  customerEngagementScore: number
+}
+
+export interface IBestPerformingBranches {
   bestPerformingBranches: {
     branchId: string;
     branchName: string;
