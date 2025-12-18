@@ -5,6 +5,7 @@ import configurationRoutes from "./configuration.route"
 import accessLogRoutes from "./accessLog.routes.ts";
 import bankRoutes from "./bank.routes";
 import videoRoutes from "./videos.routes.ts"
+import statisticsRoutes from "./statistics.routes.ts"
 import { fileURLToPath } from "url";
 import path from "path";
 import express from "express";
@@ -15,6 +16,7 @@ router.use("/services", serviceRoutes);
 router.use("/credentials", credentialRoutes)
 router.use("/configurations", configurationRoutes)
 router.use("/videos", videoRoutes)
+router.use("/statistics", statisticsRoutes)
 
 // Serve static files from the uploads folder
 const __filename = fileURLToPath(import.meta.url);
